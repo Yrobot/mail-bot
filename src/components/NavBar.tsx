@@ -3,15 +3,15 @@ import Icon from "@/components/Icon";
 
 const config = [
   {
-    name: "Channel",
+    name: "通道",
     href: "/",
   },
   {
-    name: "API",
+    name: "接口",
     href: "/apis",
   },
   {
-    name: "About",
+    name: "关于",
     href: "/about",
   },
 ];
@@ -24,10 +24,12 @@ function NavBar() {
           <Icon icon="MB" className="select-none w-12 h-12" />
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
+          <ul className="menu menu-horizontal px-1 py-0 space-x-2">
             {config.map(({ name, href }) => (
               <li key={name}>
-                <a href={href}>{name}</a>
+                <a href={href} className="font-medium text-lg">
+                  {name}
+                </a>
               </li>
             ))}
           </ul>
