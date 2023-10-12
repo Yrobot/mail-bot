@@ -5,6 +5,10 @@
 :root {
 }
 
+body {
+  @apply h-screen overflow-y-auto relative;
+}
+
 @layer base {
   .page-content {
     max-width: 1440px;
