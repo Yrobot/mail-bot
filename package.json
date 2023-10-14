@@ -11,6 +11,7 @@
   "dependencies": {
     "@prisma/client": "5.4.2",
     "@yrobot/svg-inline": "^1.2.5",
+    "ahooks": "^3.7.8",
     "classnames": "^2.3.2",
     "next": "13.5.4",
     "prisma": "^5.4.2",
