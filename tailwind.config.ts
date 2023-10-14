@@ -4,7 +4,7 @@ const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["lofi"],
+    themes: ["light", "dark", "lofi"],
   },
 };
 export default config;

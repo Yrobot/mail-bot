@@ -1,40 +1,41 @@
 import React from "react";
+import Logo from "@/components/Logo";
 import Icon from "@/components/Icon";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 const config = [
   {
-    name: "通道",
-    href: "/",
+    content: <ThemeSwitcher />,
+    key: "theme",
   },
   {
-    name: "接口",
-    href: "/apis",
-  },
-  {
-    name: "关于",
-    href: "/about",
+    content: (
+      <a
+        href="https://github.com/Yrobot/mail-bot"
+        className="btn btn-ghost"
+        target="_blank"
+      >
+        <Icon icon="github" className="h-6 w-6" />
+      </a>
+    ),
+    key: "github",
   },
 ];
 
 function NavBar() {
   return (
-    <div className="sticky top-0 bg-base-100">
-      <div className="page-content navbar">
+    <div className="sticky top-0 z-30 bg-base-100">
+      <div className="navbar px-8">
         <div className="navbar-start">
-          <Icon icon="MB" className="h-12 w-12 select-none" />
+          <Logo />
         </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal space-x-2 px-1 py-0">
-            {config.map(({ name, href }) => (
-              <li key={name}>
-                <a href={href} className="text-lg font-medium">
-                  {name}
-                </a>
-              </li>
+        <div className="navbar-end">
+          <ul className="flex items-center justify-center space-x-2">
+            {config.map(({ content, key }) => (
+              <li key={key}>{content}</li>
             ))}
           </ul>
         </div>
-        <div className="navbar-end"></div>
       </div>
     </div>
   );

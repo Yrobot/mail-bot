@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "react-hot-toast";
+
 import NavBar from "@/components/NavBar";
+import SideMenu from "@/components/SideMenu";
 
 import "./globals.css";
 
@@ -21,7 +24,13 @@ export default function RootLayout({
     <html lang="en" data-theme="lofi">
       <body className={inter.className}>
         <NavBar />
-        {children}
+        <div className="relative z-0 flex flex-row items-start justify-start">
+          <div className="w-80 flex-none">
+            <SideMenu />
+          </div>
+          <div className="flex-auto">{children}</div>
+        </div>
+        <Toaster />
       </body>
     </html>
   );

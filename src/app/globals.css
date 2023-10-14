@@ -6,14 +6,8 @@
 }
 
 body {
-  @apply h-screen overflow-y-auto relative;
+  @apply relative h-screen overflow-y-auto bg-slate-500;
 }
 
 @layer base {
-  .page-content {
-    max-width: 1440px;
-    padding-left: 2rem !important;
-    padding-right: 2rem !important;
-    @apply mx-auto;
-  }
 }
