@@ -2,6 +2,7 @@
 import Icon from "@/components/Icon";
 import { createEmail } from "@/services";
 import { wrapper } from "@/utils/request";
+import { open } from "@/components/Modal";
 
 function ListEmpty() {
   return (
@@ -12,12 +13,18 @@ function ListEmpty() {
       <button
         className="btn btn-neutral mt-6"
         onClick={() => {
-          wrapper(createEmail)({
-            account: "yrbot@yrobot.top4",
-            host: "123456",
-            port: 123,
-            token: "123456",
-          }).catch(console.error);
+          open({
+            content: "123",
+          });
+          open({
+            content: "1234",
+          });
+          // wrapper(createEmail)({
+          //   account: "yrbot@yrobot.top4",
+          //   host: "123456",
+          //   port: 123,
+          //   token: "123456",
+          // }).catch(console.error);
         }}
       >
         新建邮箱

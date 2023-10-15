@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 
 import NavBar from "@/components/NavBar";
 import SideMenu from "@/components/SideMenu";
+import { ModalLayer } from "@/components/Modal";
 
 import "./globals.css";
 
@@ -30,6 +31,7 @@ export default function RootLayout({
           </div>
           <div className="h-full flex-auto">{children}</div>
         </div>
+        <ModalLayer />
         <Toaster />
       </body>
     </html>
