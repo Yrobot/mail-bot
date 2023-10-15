@@ -19,12 +19,14 @@ const ModalWrapper = ({
     </button>
   ),
 }: {
-  children: React.ReactNode;
+  children:
+    | React.ReactNode
+    | ((params: { close: () => void }) => React.ReactNode);
   className?: string;
   id: string;
   handleClose: () => void;
   onMounted: () => void;
-  buttons?: (params: { close: () => void }) => React.ReactNode;
+  buttons?: null | ((params: { close: () => void }) => React.ReactNode);
 }) => {
   const ref = useRef<HTMLInputElement>(null);
 
@@ -49,8 +51,11 @@ const ModalWrapper = ({
       <input type="checkbox" ref={ref} className="modal-toggle" />
       <div className={cn("modal", className)}>
         <div className="modal-box">
-          {children}
-          <div className="modal-action">{buttons({ close: onClose })}</div>
+          {typeof children === "function" && children({ close: onClose })}
+          {typeof children !== "function" && children}
+          {buttons && (
+            <div className="modal-action">{buttons({ close: onClose })}</div>
+          )}
         </div>
       </div>
     </>
