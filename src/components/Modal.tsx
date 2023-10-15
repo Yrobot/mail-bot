@@ -64,37 +64,81 @@ const ModalWrapper = ({
 
 let index = 0;
 
+const initModal = ({ onClose }: { onClose?: () => void }) => {
+  const modalId = `common-modal-${index++}`;
+  const layer = document.getElementById(MODAL_LAYER_ID);
+  if (!layer)
+    throw new Error(
+      "common modal layer not found, please add ModalLayer into page first.",
+    );
+
+  const modal = document.createElement("div");
+  modal.id = modalId;
+  layer.appendChild(modal);
+
+  const modalRoot = createRoot(modal);
+
+  const handleClose = () => {
+    modalRoot.unmount();
+    layer.removeChild(modal);
+    onClose?.();
+  };
+  return {
+    handleClose,
+    modalId,
+    modalRoot,
+  };
+};
+
+export const confirm = ({
+  onConfirm,
+  content,
+}: {
+  content: Parameters<typeof ModalWrapper>[0]["children"];
+  onConfirm: () => void;
+}) =>
+  new Promise((resolve) => {
+    const { handleClose, modalId, modalRoot } = initModal({});
+    return modalRoot.render(
+      <ModalWrapper
+        id={modalId}
+        handleClose={handleClose}
+        onMounted={resolve as () => void}
+        buttons={({ close }) => (
+          <>
+            <button className="btn" onClick={close}>
+              取消
+            </button>
+            <button
+              className="btn btn-neutral"
+              onClick={() => {
+                handleClose();
+                onConfirm();
+              }}
+            >
+              确认
+            </button>
+          </>
+        )}
+      >
+        {content}
+      </ModalWrapper>,
+    );
+  });
+
 export const open = ({
   content,
   onClose,
   ...props
 }: {
   content: Parameters<typeof ModalWrapper>[0]["children"];
-  onClose?: () => void;
+  onClose?: Parameters<typeof initModal>[0]["onClose"];
 } & Omit<
   Parameters<typeof ModalWrapper>[0],
   "children" | "id" | "handleClose" | "onMounted"
 >) =>
   new Promise((resolve) => {
-    const modalId = `common-modal-${index++}`;
-    const layer = document.getElementById(MODAL_LAYER_ID);
-    if (!layer)
-      throw new Error(
-        "common modal layer not found, please add ModalLayer into page first.",
-      );
-
-    const modal = document.createElement("div");
-    modal.id = modalId;
-    layer.appendChild(modal);
-
-    const modalRoot = createRoot(modal);
-
-    const handleClose = () => {
-      modalRoot.unmount();
-      layer.removeChild(modal);
-      onClose?.();
-    };
-
+    const { handleClose, modalId, modalRoot } = initModal({ onClose });
     return modalRoot.render(
       <ModalWrapper
         {...props}

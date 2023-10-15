@@ -10,7 +10,7 @@ function Icon({ className = "", icon = "", ...props }) {
     <svg-inline
       {...props}
       src={`/icons/${icon}.svg`}
-      class={cn("basic-icon", className)}
+      class={cn("overflow-hidden", className)}
     />
   );
 }
