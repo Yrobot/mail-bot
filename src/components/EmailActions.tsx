@@ -1,17 +1,22 @@
 "use client";
+import type { Channel } from "@prisma/client";
 import { deleteEmail, activeEmail, closeEmail } from "@/services";
 import { confirm } from "@/components/Modal";
+import openEmailModal from "@/components/EmailModal";
 import toast from "@/toast";
 
-export default function EmailActions({
-  status,
-  account,
-}: {
-  status: string;
-  account: string;
-}) {
+export default function EmailActions({ email }: { email: Channel }) {
+  const { account, status } = email;
   return (
     <>
+      <button
+        className="btn btn-link h-auto min-h-0 px-0 py-1"
+        onClick={() => {
+          openEmailModal({ data: email });
+        }}
+      >
+        编辑
+      </button>
       <button className="btn btn-link h-auto min-h-0 px-0 py-1">测试</button>
       {status === "CLOSED" && (
         <button

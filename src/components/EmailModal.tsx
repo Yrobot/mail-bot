@@ -1,7 +1,8 @@
 "use client";
+import type { Channel } from "@prisma/client";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { createEmail } from "@/services";
+import { createEmail, updateEmail } from "@/services";
 import { wrapper } from "@/utils/request";
 import { open } from "@/components/Modal";
 import Input from "@/components/Input";
@@ -23,8 +24,6 @@ const EmailFormValidateSchema = Yup.object().shape({
     .positive("端口必须为正整数")
     .required("此为必填项"),
 });
-
-const createFetch = wrapper(createEmail);
 
 const config = [
   {
@@ -53,19 +52,25 @@ const config = [
   },
 ];
 
-function CreateEmailModal({ close }: { close: () => void }) {
+function EmailModal({ close, data }: { close: () => void; data?: Channel }) {
+  const isEdit = !!data;
+  const initData = isEdit
+    ? data
+    : { account: "", host: "", port: 465, token: "" };
+
   return (
     <div>
-      <h3 className="mb-2 text-lg font-bold">新建邮箱</h3>
+      <h3 className="mb-2 text-lg font-bold">
+        {isEdit ? "编辑邮箱" : "新建邮箱"}
+      </h3>
       <Formik
-        initialValues={
-          { account: "", host: "", port: 465, token: "" } as EmailFormValues
-        }
+        initialValues={initData as EmailFormValues}
         validationSchema={EmailFormValidateSchema}
         onSubmit={(values, { setSubmitting }) => {
-          createFetch(values)
+          wrapper(isEdit ? updateEmail : createEmail)(values)
             .then(() => {
               toast.success("提交成功");
+              close();
             })
             .catch(() => {})
             .finally(() => {
@@ -119,9 +124,9 @@ function CreateEmailModal({ close }: { close: () => void }) {
   );
 }
 
-export default function openCreateEmailModal() {
+export default function openEmailModal({ data }: { data?: Channel } = {}) {
   open({
-    content: ({ close }) => <CreateEmailModal close={close} />,
+    content: ({ close }) => <EmailModal close={close} data={data} />,
     buttons: null,
   });
 }

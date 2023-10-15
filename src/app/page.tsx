@@ -53,7 +53,7 @@ export default async function Home() {
                 key: "action",
                 render: (_, email) => (
                   <div className="space-x-4">
-                    <EmailActions {...email} />
+                    <EmailActions email={email} />
                   </div>
                 ),
               },

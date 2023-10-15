@@ -1,5 +1,5 @@
 "use server";
-
+import type { Channel } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { PrismaClient } from "@prisma/client";
 import { Status } from "@/constant";
@@ -58,6 +58,24 @@ export const createEmail = async (
   prisma.channel
     .create({
       data: { ...email, status: "ACTIVE" },
+    })
+    .then((res) => {
+      revalidatePath("/");
+      return res;
+    });
+
+export const updateEmail = async ({
+  account,
+  token,
+  port,
+  host,
+  export: export_,
+  status,
+}: Partial<Channel>) =>
+  prisma.channel
+    .update({
+      where: { account },
+      data: { token, port, host, export: export_, status },
     })
     .then((res) => {
       revalidatePath("/");
