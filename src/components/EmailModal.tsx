@@ -19,7 +19,9 @@ interface EmailFormValues {
 
 const EmailFormValidateSchema = Yup.object().shape({
   account: Yup.string().email("Email不符合规范").required("此为必填项"),
-  host: Yup.string().url("地址不符合规范").required("此为必填项"),
+  host: Yup.string()
+    // .matches(/^http/g, "地址去除协议")
+    .required("此为必填项"),
   token: Yup.string().required("此为必填项"),
   port: Yup.number()
     .integer("端口必须为正整数")
@@ -32,13 +34,13 @@ const config = [
     title: "邮箱地址",
     name: "account",
     type: "email",
-    placeholder: "xxx@xxx.xxx",
+    placeholder: "xxx@xxx.com",
   },
   {
     title: "主机地址",
     name: "host",
     type: "text",
-    placeholder: "http(s)://xxx.xxx",
+    placeholder: "smtp.xxx.com",
   },
   {
     title: "支持直接请求",

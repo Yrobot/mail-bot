@@ -15,6 +15,7 @@
     "classnames": "^2.3.2",
     "formik": "^2.4.5",
     "next": "13.5.4",
+    "nodemailer": "^6.9.6",
     "prisma": "^5.4.2",
     "react": "^18",
     "react-dom": "^18",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.11",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10",

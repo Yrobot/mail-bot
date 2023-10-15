@@ -21,12 +21,12 @@ model Channel {
   export    Boolean  @default(true) // 默认直接暴露到 http
 
   // SMTP
-  host      String
-  port      Int
-  account   String      @unique
-  token     String
-  Interface Interface[]
-  Messge    Messge[]
+  host       String
+  port       Int
+  account    String      @unique
+  token      String
+  interfaces Interface[]
+  messages   Message[]
 }
 
 // 一个 channel 可以有多个接口，接口会在基础smtp基础上加一些功能，如：覆盖参数，自动添加messageId，自动添加时间戳等
@@ -39,13 +39,13 @@ model Interface {
   status  String // ACTIVE, CLOSED, DELETED
   overlay String // JSON string
 
-  channel Channel  @relation(fields: [email], references: [account])
-  email   String
-  Messge  Messge[]
+  channel  Channel   @relation(fields: [email], references: [account])
+  email    String
+  messages Message[]
 }
 
 // 
-model Messge {
+model Message {
   id     Int    @id @default(autoincrement())
   status String // ACTIVE, CLOSE, DELETED
 
