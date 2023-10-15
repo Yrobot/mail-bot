@@ -1,6 +1,10 @@
 import { getEmailList } from "@/services";
 import ListEmpty from "@/components/ListEmpty";
 import Table from "@/components/Table";
+import PageHead from "@/components/PageHead";
+import EmailActions from "@/components/EmailActions";
+import CerateEmailButton from "@/components/CerateEmailButton";
+import { route } from "@/routes";
 
 type Status = "ACTIVE" | "CLOSED" | "DELETED";
 
@@ -15,6 +19,7 @@ export default async function Home() {
   const isEmpty = emails.length === 0;
   return (
     <main className="h-full p-4">
+      <PageHead title={route.email.name} extend={<CerateEmailButton />} />
       {isEmpty && <ListEmpty />}
       {!isEmpty && (
         <>
@@ -46,24 +51,9 @@ export default async function Home() {
               {
                 title: "操作",
                 key: "action",
-                render: (_, { status }) => (
+                render: (_, email) => (
                   <div className="space-x-4">
-                    <button className="btn btn-link h-auto min-h-0 px-0 py-1">
-                      测试
-                    </button>
-                    {status === "CLOSED" && (
-                      <button className="btn btn-link h-auto min-h-0 px-0 py-1">
-                        激活
-                      </button>
-                    )}
-                    {status === "ACTIVE" && (
-                      <button className="btn btn-link h-auto min-h-0 px-0 py-1">
-                        关闭
-                      </button>
-                    )}
-                    <button className="btn btn-link h-auto min-h-0 px-0 py-1">
-                      删除
-                    </button>
+                    <EmailActions {...email} />
                   </div>
                 ),
               },

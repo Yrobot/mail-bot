@@ -11,6 +11,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  icons: "/favicon.ico",
   title: "Mail-Bot",
   description:
     "A useful tool helps you send a smtp email by calling a http request. briefly, smtp to http. And you can manege all the APIs in the dashboard.",

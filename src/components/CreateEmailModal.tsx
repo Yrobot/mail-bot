@@ -1,3 +1,4 @@
+"use client";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { createEmail } from "@/services";
@@ -27,34 +28,35 @@ const createFetch = wrapper(createEmail);
 
 const config = [
   {
-    title: "Email",
+    title: "邮箱地址",
     name: "account",
     type: "email",
     placeholder: "xxx@xxx.xxx",
   },
   {
-    title: "Host",
+    title: "主机地址",
     name: "host",
     type: "text",
     placeholder: "http(s)://xxx.xxx",
   },
   {
-    title: "Port",
+    title: "端口",
     name: "port",
     type: "number",
     placeholder: "465",
   },
   {
-    title: "Token",
+    title: "密钥",
     name: "token",
     type: "password",
+    placeholder: "密码/Token",
   },
 ];
 
 function CreateEmailModal({ close }: { close: () => void }) {
   return (
     <div>
-      <h3 className="mb-2 text-lg font-bold">Create an Email</h3>
+      <h3 className="mb-2 text-lg font-bold">新建邮箱</h3>
       <Formik
         initialValues={
           { account: "", host: "", port: 465, token: "" } as EmailFormValues
@@ -98,7 +100,7 @@ function CreateEmailModal({ close }: { close: () => void }) {
               </div>
 
               <div className="modal-action mt-8">
-                <button className="btn" onClick={close}>
+                <button className="btn" type="button" onClick={close}>
                   关闭
                 </button>
                 <button

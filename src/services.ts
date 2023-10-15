@@ -1,11 +1,53 @@
 "use server";
+
+import { revalidatePath } from "next/cache";
 import { PrismaClient } from "@prisma/client";
+import { Status } from "@/constant";
 
 const prisma = new PrismaClient();
 
-export const getEmailList = async (
-  ...args: Parameters<typeof prisma.channel.findMany>
-) => prisma.channel.findMany(...args);
+export const getEmailList = async () =>
+  // where: Parameters<typeof prisma.channel.findMany>[0] ,
+  prisma.channel.findMany({
+    where: {
+      status: {
+        in: [Status.ACTIVE, Status.CLOSED],
+      },
+    },
+  });
+
+export const deleteEmail = async (email: string) =>
+  prisma.channel
+    .update({
+      where: { account: email },
+      data: { status: Status.DELETED },
+    })
+    .then((res) => {
+      revalidatePath("/");
+      return res;
+    });
+
+export const activeEmail = async (email: string) =>
+  prisma.channel
+    .update({
+      where: { account: email },
+      data: { status: Status.ACTIVE },
+    })
+    .then((res) => {
+      revalidatePath("/");
+      return res;
+    });
+
+export const closeEmail = async (email: string) =>
+  prisma.channel
+    .update({
+      where: { account: email },
+      data: { status: Status.CLOSED },
+    })
+    .then((res) => {
+      revalidatePath("/");
+      return res;
+    });
 
 export const createEmail = async (
   email: Omit<
@@ -13,6 +55,11 @@ export const createEmail = async (
     "id" | "status" | "createdAt" | "updatedAt"
   >,
 ) =>
-  prisma.channel.create({
-    data: { ...email, status: "ACTIVE" },
-  });
+  prisma.channel
+    .create({
+      data: { ...email, status: "ACTIVE" },
+    })
+    .then((res) => {
+      revalidatePath("/");
+      return res;
+    });
