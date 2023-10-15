@@ -51,7 +51,7 @@ function ThemeSwitcher() {
   return (
     <div title="Change Theme" className="dropdown dropdown-end">
       <div tabIndex={0} className="btn btn-ghost">
-        <span className="font-normal">Theme</span>
+        <span className="font-normal">主题</span>
         <Icon icon="arrow-down" className="h-2 w-2 fill-current opacity-60" />
       </div>
       <div className="dropdown-content rounded-box top-px mt-16 max-h-[70vh] w-48 overflow-y-auto bg-base-200 text-base-content shadow">

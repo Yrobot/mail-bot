@@ -10,16 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// 通往 email 的通道
 // 最基础的 smtp to http 服务
+// 可能支持别 EMAIL 连接的服务
 model Channel {
-  id     Int    @id @default(autoincrement())
-  path   String // request path // http://xxx.com/channel/$path
-  status String // ACTIVE, CLOSE, DELETED
+  id        Int      @id @default(autoincrement())
+  status    String // ACTIVE, CLOSED, DELETED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // SMTP
   host      String
   port      Int
-  account   String
+  account   String      @unique
   token     String
   Interface Interface[]
   Messge    Messge[]
@@ -27,20 +30,25 @@ model Channel {
 
 // 一个 channel 可以有多个接口，接口会在基础smtp基础上加一些功能，如：覆盖参数，自动添加messageId，自动添加时间戳等
 model Interface {
-  id      Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   path    String // request path // http://xxx.com/api/$path
-  status  String // ACTIVE, CLOSE, DELETED
+  status  String // ACTIVE, CLOSED, DELETED
   overlay String // JSON string
 
-  channel   Channel  @relation(fields: [channelId], references: [id])
-  channelId Int
-  Messge    Messge[]
+  channel Channel  @relation(fields: [email], references: [account])
+  email   String
+  Messge  Messge[]
 }
 
 // 
 model Messge {
   id     Int    @id @default(autoincrement())
   status String // ACTIVE, CLOSE, DELETED
+
+  createdAt DateTime @default(now())
 
   // Based on https://nodemailer.com/message/ 
   from    String
@@ -52,8 +60,8 @@ model Messge {
   html    String
   // attachments String[] // disbale attachments for now
 
-  channel   Channel @relation(fields: [channelId], references: [id])
-  channelId Int
+  channel Channel @relation(fields: [email], references: [account])
+  email   String
 
   interface   Interface @relation(fields: [interfaceId], references: [id])
   interfaceId Int

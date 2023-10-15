@@ -24,7 +24,7 @@ const config = [
 
 function NavBar() {
   return (
-    <div className="sticky top-0 z-30 bg-base-100">
+    <div className="relative z-30 flex-none bg-base-100 shadow-sm">
       <div className="navbar px-8">
         <div className="navbar-start">
           <Logo />

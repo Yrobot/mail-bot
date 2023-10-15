@@ -2,12 +2,16 @@ import React from "react";
 
 const config = [
   {
-    name: "通道",
+    name: "邮箱",
     href: "/",
   },
   {
     name: "接口",
     href: "/apis",
+  },
+  {
+    name: "消息",
+    href: "/messages",
   },
   {
     name: "关于",

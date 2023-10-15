@@ -1,0 +1,30 @@
+{
+    "cells": [
+        {
+            "language": "typescript",
+            "source": [
+                "(async () => {\n  fetch(\"http://localhost:3000/email\", {\n    method: \"POST\",\n    body: JSON.stringify({\n      name: \"test11\",\n      email: \"\",\n    }),\n  })\n    .then((res) => res?.text() ?? res?.json())\n    .then((res) => console.log(res));\n})();\n"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "test11",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                ""
+            ],
+            "outputs": []
+        }
+    ]
+}

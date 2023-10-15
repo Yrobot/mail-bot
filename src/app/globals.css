@@ -6,8 +6,12 @@
 }
 
 body {
-  @apply relative h-screen overflow-y-auto bg-slate-500;
+  @apply relative flex h-screen flex-col overflow-y-auto;
 }
 
 @layer base {
+  .tips {
+    color: hsl(var(--bc) / 0.4);
+    @apply text-sm;
+  }
 }

@@ -24,11 +24,11 @@ export default function RootLayout({
     <html lang="en" data-theme="lofi">
       <body className={inter.className}>
         <NavBar />
-        <div className="relative z-0 flex flex-row items-start justify-start">
-          <div className="w-80 flex-none">
+        <div className="relative z-0 flex flex-auto flex-row items-start justify-start">
+          <div className="h-full w-80 flex-none shadow">
             <SideMenu />
           </div>
-          <div className="flex-auto">{children}</div>
+          <div className="h-full flex-auto">{children}</div>
         </div>
         <Toaster />
       </body>

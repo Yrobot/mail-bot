@@ -1,17 +1,12 @@
-"use client";
-import toast from "@/toast";
+import { getEmailList } from "@/services";
+import ListEmpty from "@/components/ListEmpty";
 
-export default function Home() {
+export default async function Home() {
+  const emails = await getEmailList();
+  const isEmpty = emails.length === 0;
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <button
-        className="btn"
-        onClick={() => {
-          toast.success("hello world");
-        }}
-      >
-        Button
-      </button>
+    <main className="h-full p-4">
+      <ListEmpty />
     </main>
   );
 }
