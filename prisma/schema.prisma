@@ -18,6 +18,7 @@ model Channel {
   status    String // ACTIVE, CLOSED, DELETED
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  export    Boolean  @default(true) // 默认直接暴露到 http
 
   // SMTP
   host      String
