@@ -7,7 +7,7 @@ export const useClientState = <T extends unknown>({
 }: {
   default: T;
   getState: () => T;
-}) => {
+}): [T, (state: T) => void] => {
   const [value, setValue] = useState<T>(defaultValue);
   useEffect(() => {
     setValue(getState());

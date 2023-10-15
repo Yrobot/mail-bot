@@ -14,4 +14,43 @@ body {
     color: hsl(var(--bc) / 0.4);
     @apply text-sm;
   }
+  .tooltip-popup {
+    position: absolute;
+    left: 50%;
+    top: -8px;
+    transform: translate(-50%, -100%);
+
+    --tooltip-tail: 0.1875rem;
+    --tooltip-color: hsl(var(--n));
+    --tooltip-text-color: hsl(var(--nc));
+    max-width: 20rem;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    background-color: var(--tooltip-color);
+    color: var(--tooltip-text-color);
+    width: max-content;
+  }
+  .tooltip-popup::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 8px;
+    left: 0;
+    bottom: -8px;
+  }
+  .tooltip-popup::after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    display: block;
+    transform: translateX(-50%);
+    border-style: solid;
+    border-width: var(--tooltip-tail, 0);
+    border-color: var(--tooltip-color) transparent transparent transparent;
+    left: 50%;
+    bottom: calc(-2 * var(--tooltip-tail));
+  }
 }

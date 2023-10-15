@@ -18,9 +18,8 @@ export const getEmailList = async () =>
 
 export const deleteEmail = async (email: string) =>
   prisma.channel
-    .update({
+    .delete({
       where: { account: email },
-      data: { status: Status.DELETED },
     })
     .then((res) => {
       revalidatePath("/");

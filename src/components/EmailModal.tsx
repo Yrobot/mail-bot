@@ -6,6 +6,7 @@ import { createEmail, updateEmail } from "@/services";
 import { wrapper } from "@/utils/request";
 import { open } from "@/components/Modal";
 import Input from "@/components/Input";
+import Toggle from "@/components/Toggle";
 import toast from "@/toast";
 
 interface EmailFormValues {
@@ -13,6 +14,7 @@ interface EmailFormValues {
   host: string;
   port: number;
   token: string;
+  export: boolean;
 }
 
 const EmailFormValidateSchema = Yup.object().shape({
@@ -39,6 +41,11 @@ const config = [
     placeholder: "http(s)://xxx.xxx",
   },
   {
+    title: "支持直接请求",
+    name: "export",
+    as: Toggle,
+  },
+  {
     title: "端口",
     name: "port",
     type: "number",
@@ -56,7 +63,7 @@ function EmailModal({ close, data }: { close: () => void; data?: Channel }) {
   const isEdit = !!data;
   const initData = isEdit
     ? data
-    : { account: "", host: "", port: 465, token: "" };
+    : { account: "", host: "", port: 465, token: "", export: true };
 
   return (
     <div>
@@ -92,14 +99,14 @@ function EmailModal({ close, data }: { close: () => void; data?: Channel }) {
           return (
             <form onSubmit={handleSubmit}>
               <div className="space-y-2">
-                {config.map((item) => (
-                  <Input
-                    key={item.name}
-                    {...item}
+                {config.map(({ as: As = Input, ...rest }) => (
+                  <As
+                    key={rest.name}
+                    {...rest}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values[item.name as keyof typeof values]}
-                    error={getErrorTip(item.name as keyof typeof values)}
+                    value={values[rest.name as keyof typeof values] as any}
+                    error={getErrorTip(rest.name as keyof typeof values)}
                   />
                 ))}
               </div>

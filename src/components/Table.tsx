@@ -53,7 +53,7 @@ function Table<
         </tbody>
         {/* foot */}
         <tfoot>
-          <tr> {header}</tr>
+          <tr>{header}</tr>
         </tfoot>
       </table>
     </div>

@@ -4,6 +4,7 @@ import Table from "@/components/Table";
 import PageHead from "@/components/PageHead";
 import EmailActions from "@/components/EmailActions";
 import CerateEmailButton from "@/components/CerateEmailButton";
+import UrlTooltip from "@/components/UrlTooltip";
 import { route } from "@/routes";
 
 type Status = "ACTIVE" | "CLOSED" | "DELETED";
@@ -38,7 +39,11 @@ export default async function Home() {
               {
                 title: "支持直接请求",
                 key: "export",
-                render: (support) => (support ? "是" : "否"),
+                render: (support, { account }) => (
+                  <UrlTooltip path={`/email/${account}`}>
+                    {support ? "是" : "否"}
+                  </UrlTooltip>
+                ),
               },
               {
                 title: "创建时间",
