@@ -1,11 +1,9 @@
 "use server";
-import type { Channel } from "@prisma/client";
+import type { Channel, Message } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { PrismaClient, Message } from "@prisma/client";
 import { Status } from "@/constant";
-import { sendEmail, Transport } from "@/utils/email";
-
-const prisma = new PrismaClient();
+import { sendEmailFromChannel, sendEmailFromInterface } from "@/utils/email";
+import prisma from "@/db";
 
 export const getEmailList = async () =>
   // where: Parameters<typeof prisma.channel.findMany>[0] ,
@@ -94,40 +92,22 @@ type MessageWithInterface = MessageInput & {
   interfaceId: Message["interfaceId"];
 };
 
-const emailToTransport = async (email: string): Promise<Transport | null> => {
-  const channel = await prisma.channel.findUnique({
-    where: { account: email },
-  });
-  if (!channel) return null;
-  const { host, port, account, token } = channel;
-  return {
-    host: host,
-    port: port,
-    auth: {
-      user: account,
-      pass: token,
-    },
-  };
-};
-
 export const sendMessage = async (
   message: MessageWithChannel | MessageWithInterface,
 ) => {
-  let transport: Transport | null = null;
   if ("email" in message) {
-    transport = await emailToTransport(message.email);
+    const { email, ...res } = message;
+    return sendEmailFromChannel({
+      email,
+      message: res,
+    });
   }
   if ("interfaceId" in message) {
-    const { email } =
-      (await prisma.interface.findUnique({
-        where: { id: message.interfaceId },
-      })) ?? {};
-    if (!email) throw new Error("Email not found in interface");
-    transport = await emailToTransport(email);
+    const { interfaceId, ...res } = message;
+    return sendEmailFromInterface({
+      interfaceId,
+      message: res,
+    });
   }
-  if (transport === null) throw new Error("Transport not found");
-  return sendEmail({
-    transport,
-    message,
-  });
+  throw new Error("Invalid message: required email or interfaceId");
 };
