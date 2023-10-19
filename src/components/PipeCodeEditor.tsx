@@ -16,11 +16,8 @@ import { constrainedEditor } from "constrained-editor-plugin";
 const TYPE_CODE = `type KeyTypes = "from" | "to" | "cc" | "bcc" | "subject" | "text" | "html" | string;
 type ValueTypes = string | number | undefined;
 type Email = Record<KeyTypes, ValueTypes>;`;
-const PRE_CODE = `<T,>(req: T): Email => ( // 在下方更新转换逻辑`;
+const PRE_CODE = `<T extends Email>(req: T): Email => ( // 在下方更新转换逻辑`;
 const LAST_CODE = `)`;
-
-const startIndex = `${TYPE_CODE}\n${PRE_CODE}\n`.split("\n").length;
-const EDIT_RANGE = [startIndex, 1, startIndex + 4, 1];
 
 const CODE_LABEL = "pipeStr";
 
@@ -66,6 +63,10 @@ const CodeEditor = forwardRef<
     const model = editor.getModel();
     constrainedInstance.initializeIn(editor);
     let restrictions = [];
+
+    const startIndex = `${TYPE_CODE}\n${PRE_CODE}\n`.split("\n").length;
+    const lastIndex = code.split("\n").length;
+    const EDIT_RANGE = [startIndex, 1, lastIndex, 1];
     restrictions.push({
       range: EDIT_RANGE,
       label: CODE_LABEL,
@@ -97,7 +98,11 @@ const CodeEditor = forwardRef<
         allValuesInEditableRanges: { [CODE_LABEL]: string },
         currentEditableRangeObject: any,
       ) => {
-        const newCode = allValuesInEditableRanges[CODE_LABEL];
+        let newCode = allValuesInEditableRanges[CODE_LABEL];
+        // remove last \n
+        while (newCode && newCode.endsWith("\n")) {
+          newCode = newCode.slice(0, -1);
+        }
         setCode(newCode);
       },
     );
@@ -127,6 +132,10 @@ const CodeEditor = forwardRef<
 
 const DEFAULT_MAX_LENGTH = 1000;
 
+const DEFAULT_CODE = `{
+  ...req,
+}`;
+
 export default function PipeCodeEditor({
   value,
   onConfirm,
@@ -136,7 +145,7 @@ export default function PipeCodeEditor({
   onConfirm?: (value: string) => void;
   onCancel?: () => void;
 }) {
-  const [code, setCode] = useState(value);
+  const [code, setCode] = useState(value || DEFAULT_CODE);
   const editorRef = useRef<CodeEditorRef>(null);
   const { base, errorTip } = useMemo(
     () => ({
@@ -206,6 +215,6 @@ export default function PipeCodeEditor({
 //   | string;
 // type ValueTypes = string | number | undefined;
 // type Email = Record<KeyTypes, ValueTypes>;
-// <T,>(req: T): Email => ({
+// <T extends Email>(req: T): Email => ({
 //   ...req,
 // });

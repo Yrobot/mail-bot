@@ -9,6 +9,7 @@ function Toggle({
   bottomRightAlt,
   error,
   value,
+  onValueChange,
   ...props
 }: {
   value?: boolean;
@@ -17,6 +18,7 @@ function Toggle({
   bottomLeftAlt?: string;
   bottomRightAlt?: string;
   error?: string;
+  onValueChange?: (v: string) => void;
 } & Omit<Partial<React.InputHTMLAttributes<HTMLInputElement>>, "value">) {
   return (
     <div className={cn("form-control w-full", className)}>

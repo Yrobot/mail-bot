@@ -8,6 +8,7 @@ function Input({
   bottomLeftAlt,
   bottomRightAlt,
   error,
+  onValueChange,
   ...props
 }: {
   title?: string;
@@ -15,6 +16,7 @@ function Input({
   bottomLeftAlt?: string;
   bottomRightAlt?: string;
   error?: string;
+  onValueChange?: (v: string) => void;
 } & Partial<React.InputHTMLAttributes<HTMLInputElement>>) {
   return (
     <div className={cn("form-control w-full", className)}>

@@ -5,7 +5,7 @@ import PageHead from "@/components/PageHead";
 import EmailActions from "@/components/EmailActions";
 import CerateEmailButton from "@/components/CerateEmailButton";
 import UrlTooltip from "@/components/UrlTooltip";
-import PipeCodeEditor from "@/components/PipeCodeEditor";
+import Tooltip from "@/components/Tooltip";
 import { route } from "@/routes";
 
 type Status = "ACTIVE" | "CLOSED" | "DELETED";
@@ -47,9 +47,21 @@ export default async function Home() {
                 ),
               },
               {
-                title: "创建时间",
-                key: "createdAt",
+                title: "pipe转换逻辑",
+                key: "pipeStr",
+                render: (pipeStr) =>
+                  pipeStr ? (
+                    <Tooltip tip={pipeStr} className="whitespace-pre">
+                      自定义逻辑
+                    </Tooltip>
+                  ) : (
+                    <div className="">无转换</div>
+                  ),
               },
+              // {
+              //   title: "创建时间",
+              //   key: "createdAt",
+              // },
               {
                 title: "更新时间",
                 key: "updatedAt",
@@ -67,12 +79,6 @@ export default async function Home() {
           />
         </>
       )}
-      <PipeCodeEditor
-        value={`{
-  ...req,
-  name: \`id-\${Date.now()}\`
-}`}
-      />
     </main>
   );
 }

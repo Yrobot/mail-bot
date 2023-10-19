@@ -47,33 +47,41 @@ export const closeEmail = async (email: string) =>
       return res;
     });
 
-export const createEmail = async (
-  email: Omit<
-    Parameters<typeof prisma.channel.create>[0]["data"],
-    "id" | "status" | "createdAt" | "updatedAt"
-  >,
-) =>
-  prisma.channel
-    .create({
-      data: { ...email, status: "ACTIVE" },
-    })
-    .then((res) => {
-      revalidatePath("/");
-      return res;
-    });
+type EmailParam = Omit<Channel, "id" | "createdAt" | "updatedAt">;
 
-export const updateEmail = async ({
+const parseEmailParam = ({
   account,
   token,
   port,
   host,
   export: export_,
   status,
-}: Partial<Channel>) =>
+  pipeStr,
+}: EmailParam) => ({
+  account,
+  token,
+  port,
+  host,
+  export: export_,
+  status,
+  pipeStr,
+});
+
+export const createEmail = async (email: EmailParam) =>
+  prisma.channel
+    .create({
+      data: { ...parseEmailParam(email), status: "ACTIVE" },
+    })
+    .then((res) => {
+      revalidatePath("/");
+      return res;
+    });
+
+export const updateEmail = async (email: Partial<EmailParam>) =>
   prisma.channel
     .update({
-      where: { account },
-      data: { token, port, host, export: export_, status },
+      where: { account: email.account },
+      data: parseEmailParam(email as any),
     })
     .then((res) => {
       revalidatePath("/");
