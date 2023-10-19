@@ -16,6 +16,12 @@ const statusMap = {
   DELETED: <div className="badge badge-secondary">删除</div>,
 };
 
+const exportMap = {
+  ACTIVE: <div className="badge badge-accent">激活</div>,
+  CLOSED: <div className="badge badge-ghost">关闭</div>,
+  DELETED: <div className="badge badge-secondary">删除</div>,
+};
+
 export default async function Home() {
   const emails = await getEmailList();
   const isEmpty = emails.length === 0;
@@ -38,13 +44,16 @@ export default async function Home() {
                 render: (status) => statusMap[status as Status] ?? "-",
               },
               {
-                title: "支持直接请求",
+                title: "http直接请求",
                 key: "export",
-                render: (support, { account }) => (
-                  <UrlTooltip path={`/email/${account}`}>
-                    {support ? "是" : "否"}
-                  </UrlTooltip>
-                ),
+                render: (support, { account }) =>
+                  support ? (
+                    <UrlTooltip path={`/email/${account}`}>
+                      <div className="badge badge-accent">支持</div>
+                    </UrlTooltip>
+                  ) : (
+                    <div className="badge badge-ghost">关闭</div>
+                  ),
               },
               {
                 title: "pipe转换逻辑",
