@@ -5,6 +5,7 @@ import PageHead from "@/components/PageHead";
 import EmailActions from "@/components/EmailActions";
 import CerateEmailButton from "@/components/CerateEmailButton";
 import UrlTooltip from "@/components/UrlTooltip";
+import PipeCodeEditor from "@/components/PipeCodeEditor";
 import { route } from "@/routes";
 
 type Status = "ACTIVE" | "CLOSED" | "DELETED";
@@ -66,6 +67,12 @@ export default async function Home() {
           />
         </>
       )}
+      <PipeCodeEditor
+        value={`{
+  ...req,
+  name: \`id-\${Date.now()}\`
+}`}
+      />
     </main>
   );
 }

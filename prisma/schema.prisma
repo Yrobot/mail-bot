@@ -10,15 +10,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// model Pipe {
+//   id        Int      @id @default(autoincrement())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   pipeStr String
+// }
+
 // 通往 email 的通道
 // 最基础的 smtp to http 服务
 // 可能支持别 EMAIL 连接的服务
 model Channel {
   id        Int      @id @default(autoincrement())
-  status    String // ACTIVE, CLOSED, DELETED
+  status    String   @default("ACTIVE") // ACTIVE, CLOSED, DELETED
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   export    Boolean  @default(true) // 默认直接暴露到 http
+
+  pipeStr String?
 
   // SMTP
   host       String
@@ -35,9 +45,10 @@ model Interface {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  path    String // request path // http://xxx.com/api/$path
-  status  String // ACTIVE, CLOSED, DELETED
-  overlay String // JSON string
+  pipeStr String?
+
+  path   String // request path // http://xxx.com/api/$path
+  status String @default("ACTIVE") // ACTIVE, CLOSED, DELETED
 
   channel  Channel   @relation(fields: [email], references: [account])
   email    String

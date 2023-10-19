@@ -10,6 +10,9 @@ body {
 }
 
 @layer base {
+  .editable-code {
+    background: rgba(42, 255, 42, 0.2);
+  }
   .tips {
     color: hsl(var(--bc) / 0.4);
     @apply text-sm;

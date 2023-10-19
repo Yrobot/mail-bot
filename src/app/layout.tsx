@@ -30,7 +30,7 @@ export default function RootLayout({
           <div className="h-full w-80 flex-none shadow">
             <SideMenu />
           </div>
-          <div className="h-full flex-auto">{children}</div>
+          <div className="h-full flex-auto overflow-x-hidden">{children}</div>
         </div>
         <ModalLayer />
         <Toaster />
