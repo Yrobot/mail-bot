@@ -1,8 +1,9 @@
 "use client";
 import type { Channel } from "@prisma/client";
-import { deleteEmail, activeEmail, closeEmail, sendMessage } from "@/services";
+import { deleteEmail, activeEmail, closeEmail } from "@/services";
 import { confirm } from "@/components/Modal";
 import openEmailModal from "@/components/EmailModal";
+import openTestEmailModal from "@/components/SendTestEmailModel";
 import toast from "@/toast";
 
 export default function EmailActions({ email }: { email: Channel }) {
@@ -20,19 +21,9 @@ export default function EmailActions({ email }: { email: Channel }) {
       <button
         className="btn btn-link h-auto min-h-0 px-0 py-1"
         onClick={() => {
-          sendMessage({
+          openTestEmailModal({
             email: account,
-            subject: "Mail-Bot 测试邮件",
-            text: "这是测试邮件",
-            from: account,
-            to: "yrobot@qq.com",
-          })
-            .then(() => {
-              toast.success("发送成功");
-            })
-            .catch((error) => {
-              toast.error(`发送失败: ${error}`);
-            });
+          });
         }}
       >
         测试
