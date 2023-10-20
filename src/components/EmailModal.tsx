@@ -3,7 +3,7 @@ import type { Channel } from "@prisma/client";
 import cn from "classnames";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { createEmail, updateEmail } from "@/services";
+import { upsertEmail, EmailParam } from "@/services";
 import { wrapper } from "@/utils/request";
 import { open } from "@/components/Modal";
 import Input from "@/components/Input";
@@ -12,7 +12,7 @@ import Tooltip from "@/components/Tooltip";
 import Toggle from "@/components/Toggle";
 import toast from "@/toast";
 
-type EmailFormValues = Omit<Partial<Channel>, "createdAt" | "updatedAt">;
+type EmailFormValues = EmailParam;
 
 const EmailFormValidateSchema = Yup.object().shape({
   account: Yup.string().email("Email不符合规范").required("此为必填项"),
@@ -171,7 +171,7 @@ function EmailModal({ close, data }: { close: () => void; data?: Channel }) {
         initialValues={initData as EmailFormValues}
         validationSchema={EmailFormValidateSchema}
         onSubmit={(values, { setSubmitting }) => {
-          wrapper(isEdit ? updateEmail : createEmail)(values as any)
+          wrapper(upsertEmail)(values)
             .then(() => {
               toast.success("提交成功");
               close();

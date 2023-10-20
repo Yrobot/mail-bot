@@ -6,18 +6,13 @@ import EmailActions from "@/components/EmailActions";
 import CerateEmailButton from "@/components/CerateEmailButton";
 import UrlTooltip from "@/components/UrlTooltip";
 import Tooltip from "@/components/Tooltip";
+import StatusBadge from "@/components/StatusBadge";
 import { route } from "@/routes";
 
 type Status = "ACTIVE" | "CLOSED" | "DELETED";
 
 const statusMap = {
-  ACTIVE: <div className="badge badge-accent">激活</div>,
-  CLOSED: <div className="badge badge-ghost">关闭</div>,
-  DELETED: <div className="badge badge-secondary">删除</div>,
-};
-
-const exportMap = {
-  ACTIVE: <div className="badge badge-accent">激活</div>,
+  ACTIVE: <div className="badge badge-accent">打开</div>,
   CLOSED: <div className="badge badge-ghost">关闭</div>,
   DELETED: <div className="badge badge-secondary">删除</div>,
 };
@@ -39,9 +34,31 @@ export default async function Home() {
                 key: "account",
               },
               {
-                title: "状态",
+                title: "开关",
                 key: "status",
                 render: (status) => statusMap[status as Status] ?? "-",
+              },
+              {
+                title: "状态",
+                key: "verify",
+                render: (verify, { status }) => (
+                  <Tooltip
+                    tip={(() => {
+                      if (status === "CLOSED")
+                        return "邮箱关闭，不接收到任何邮件";
+                      return verify
+                        ? "邮箱开启，可以接收邮件"
+                        : "邮箱开启，但无法验证SMTP服务";
+                    })()}
+                  >
+                    <StatusBadge
+                      color={(() => {
+                        if (status === "CLOSED") return "gray";
+                        return verify ? "green" : "red";
+                      })()}
+                    />
+                  </Tooltip>
+                ),
               },
               {
                 title: "http直接请求",
@@ -52,7 +69,7 @@ export default async function Home() {
                       <div className="badge badge-accent">支持</div>
                     </UrlTooltip>
                   ) : (
-                    <div className="badge badge-ghost">关闭</div>
+                    <div className="badge badge-ghost">不支持</div>
                   ),
               },
               {

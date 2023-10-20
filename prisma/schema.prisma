@@ -30,6 +30,8 @@ model Channel {
 
   pipeStr String?
 
+  verify Boolean @default(false) // stmp可行性
+
   // SMTP
   host       String
   port       Int

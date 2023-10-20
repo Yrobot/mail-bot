@@ -30,8 +30,8 @@ export default function EmailActions({ email }: { email: Channel }) {
             .then(() => {
               toast.success("发送成功");
             })
-            .catch(() => {
-              toast.error("发送失败");
+            .catch((error) => {
+              toast.error("发送失败: ", error.message);
             });
         }}
       >
@@ -42,11 +42,11 @@ export default function EmailActions({ email }: { email: Channel }) {
           className="btn btn-link h-auto min-h-0 px-0 py-1"
           onClick={() =>
             activeEmail(account).then(() => {
-              toast.success("激活成功");
+              toast.success("打开成功");
             })
           }
         >
-          激活
+          打开
         </button>
       )}
       {status === "ACTIVE" && (

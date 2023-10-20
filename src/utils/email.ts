@@ -38,8 +38,17 @@ export const sendEmail = async ({
   return createTransport(transport).sendMail(message);
 };
 
-const channelToTransport = (channel: Channel): Transport => {
-  const { host, port, account, token } = channel;
+export const channelToTransport = ({
+  host,
+  port,
+  account,
+  token,
+}: {
+  host: string;
+  port: number;
+  account: string;
+  token: string;
+}): Transport => {
   return {
     host: host,
     port: port,
@@ -86,4 +95,14 @@ export const sendEmailFromChannel = async ({
     transport,
     message: pipeStr ? pipe(pipeStr)({})(message) : message,
   });
+};
+
+export const verify = async (transport: Transport): Promise<boolean> => {
+  try {
+    await createTransport(transport).verify();
+    return true;
+  } catch (error) {
+    console.log(error);
+  }
+  return false;
 };

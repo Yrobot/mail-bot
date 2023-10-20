@@ -2,7 +2,12 @@
 import type { Channel, Message } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { Status } from "@/constant";
-import { sendEmailFromChannel, sendEmailFromInterface } from "@/utils/email";
+import {
+  sendEmailFromChannel,
+  sendEmailFromInterface,
+  verify,
+  channelToTransport,
+} from "@/utils/email";
 import prisma from "@/db";
 
 export const getEmailList = async () =>
@@ -47,7 +52,10 @@ export const closeEmail = async (email: string) =>
       return res;
     });
 
-type EmailParam = Omit<Channel, "id" | "createdAt" | "updatedAt">;
+export type EmailParam = Omit<
+  Channel,
+  "id" | "createdAt" | "updatedAt" | "status" | "verify"
+>;
 
 const parseEmailParam = ({
   account,
@@ -55,7 +63,6 @@ const parseEmailParam = ({
   port,
   host,
   export: export_,
-  status,
   pipeStr,
 }: EmailParam) => ({
   account,
@@ -63,30 +70,24 @@ const parseEmailParam = ({
   port,
   host,
   export: export_,
-  status,
   pipeStr,
 });
 
-export const createEmail = async (email: EmailParam) =>
-  prisma.channel
-    .create({
-      data: { ...parseEmailParam(email), status: "ACTIVE" },
-    })
-    .then((res) => {
-      revalidatePath("/");
-      return res;
-    });
-
-export const updateEmail = async (email: Partial<EmailParam>) =>
-  prisma.channel
-    .update({
+export const upsertEmail = async (email: EmailParam) => {
+  const data: Parameters<typeof prisma.channel.upsert>[0]["create"] =
+    parseEmailParam(email);
+  data.verify = await verify(channelToTransport(email));
+  return prisma.channel
+    .upsert({
       where: { account: email.account },
-      data: parseEmailParam(email as any),
+      create: data,
+      update: data,
     })
     .then((res) => {
       revalidatePath("/");
       return res;
     });
+};
 
 type MessageInput = Partial<
   Pick<Message, "from" | "to" | "bcc" | "cc" | "subject" | "text" | "html">
