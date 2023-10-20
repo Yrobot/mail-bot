@@ -34,7 +34,7 @@ export default async function Home() {
                 key: "account",
               },
               {
-                title: "开关",
+                title: "邮箱开关",
                 key: "status",
                 render: (status) => statusMap[status as Status] ?? "-",
               },
@@ -66,10 +66,10 @@ export default async function Home() {
                 render: (support, { account }) =>
                   support ? (
                     <UrlTooltip path={`/email/${account}`}>
-                      <div className="badge badge-accent">支持</div>
+                      <div className="badge badge-accent">打开</div>
                     </UrlTooltip>
                   ) : (
-                    <div className="badge badge-ghost">不支持</div>
+                    <div className="badge badge-ghost">关闭</div>
                   ),
               },
               {
