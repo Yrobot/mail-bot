@@ -38,7 +38,7 @@ type CodeEditorRef = {
 const CodeEditor = forwardRef<
   CodeEditorRef,
   { code: string; setCode: (code: string) => void }
->(({ code, setCode }, ref) => {
+>(function CodeEditor({ code, setCode }, ref) {
   const monacoObjects = useRef<{
     editor?: any;
     monaco?: any;

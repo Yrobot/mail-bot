@@ -4,7 +4,6 @@ import cn from "classnames";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { upsertEmail, EmailParam } from "@/services";
-import { wrapper } from "@/utils/request";
 import { open } from "@/components/Modal";
 import Input from "@/components/Input";
 import PipeCodeEditor from "@/components/PipeCodeEditor";
@@ -171,12 +170,14 @@ function EmailModal({ close, data }: { close: () => void; data?: Channel }) {
         initialValues={initData as EmailFormValues}
         validationSchema={EmailFormValidateSchema}
         onSubmit={(values, { setSubmitting }) => {
-          wrapper(upsertEmail)(values)
+          upsertEmail(values)
             .then(() => {
               toast.success("提交成功");
               close();
             })
-            .catch(() => {})
+            .catch((error) => {
+              toast.error(`提交失败: ${error}`);
+            })
             .finally(() => {
               setSubmitting(false);
             });

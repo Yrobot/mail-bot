@@ -31,7 +31,7 @@ export default function EmailActions({ email }: { email: Channel }) {
               toast.success("发送成功");
             })
             .catch((error) => {
-              toast.error("发送失败: ", error.message);
+              toast.error(`发送失败: ${error}`);
             });
         }}
       >
@@ -41,9 +41,13 @@ export default function EmailActions({ email }: { email: Channel }) {
         <button
           className="btn btn-link h-auto min-h-0 px-0 py-1"
           onClick={() =>
-            activeEmail(account).then(() => {
-              toast.success("打开成功");
-            })
+            activeEmail(account)
+              .then(() => {
+                toast.success("打开成功");
+              })
+              .catch((error) => {
+                toast.error(`打开失败: ${error}`);
+              })
           }
         >
           打开
@@ -53,9 +57,13 @@ export default function EmailActions({ email }: { email: Channel }) {
         <button
           className="btn btn-link h-auto min-h-0 px-0 py-1"
           onClick={() =>
-            closeEmail(account).then(() => {
-              toast.success("关闭成功");
-            })
+            closeEmail(account)
+              .then(() => {
+                toast.success("关闭成功");
+              })
+              .catch((error) => {
+                toast.error(`操作失败: ${error}`);
+              })
           }
         >
           关闭
@@ -67,9 +75,13 @@ export default function EmailActions({ email }: { email: Channel }) {
           confirm({
             content: "确认删除邮箱吗？",
             onConfirm: () => {
-              deleteEmail(account).then(() => {
-                toast.success("删除成功");
-              });
+              deleteEmail(account)
+                .then(() => {
+                  toast.success("删除成功");
+                })
+                .catch((error) => {
+                  toast.error(`操作失败: ${error}`);
+                });
             },
           });
         }}
