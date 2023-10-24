@@ -6,6 +6,7 @@ export const route = {
   api: {
     name: "接口",
     href: "/apis",
+    disabled: true,
   },
   message: {
     name: "消息",
@@ -17,4 +18,11 @@ export const route = {
   },
 };
 
-export default [route.email, route.api, route.message, route.about];
+export default [
+  route.email,
+  route.message,
+  route.about,
+  route.api,
+] as (typeof route.email & {
+  disabled?: boolean;
+})[];

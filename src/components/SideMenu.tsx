@@ -12,12 +12,18 @@ function SideMenu() {
   return (
     <div className="">
       <ul className="menu p-4">
-        {routes.map(({ name, href }) => (
-          <li key={name}>
+        {routes.map(({ name, href, disabled = false }) => (
+          <li
+            key={name}
+            className={cn({
+              "disabled cursor-not-allowed": disabled,
+            })}
+          >
             <a
               href={href}
               className={cn("text-lg font-medium", {
                 active: path === href,
+                "pointer-events-none": disabled,
               })}
             >
               {name}

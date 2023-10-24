@@ -23,7 +23,11 @@ export default async function Home() {
   return (
     <main className="h-full p-4">
       <PageHead title={route.email.name} extend={<CerateEmailButton />} />
-      {isEmpty && <ListEmpty />}
+      {isEmpty && (
+        <ListEmpty title="没有邮箱" tips="新建一个邮箱来开始旅程吧">
+          <CerateEmailButton />
+        </ListEmpty>
+      )}
       {!isEmpty && (
         <>
           <Table

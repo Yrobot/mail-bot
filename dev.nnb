@@ -37,6 +37,25 @@
                     ]
                 }
             ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { PrismaClient } from \"@prisma/client\";\n\nconst client = new PrismaClient();\n\nclient.channel.deleteMany({ where: { id: { gt: 0 } } }).then(console.log);\n"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "{ count: 5 }",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
