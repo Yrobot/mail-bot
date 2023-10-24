@@ -57,7 +57,7 @@ function SendTestEmailModel({
         <Filed title="发送内容">
           <div className="space-y-2 text-sm text-primary opacity-60">
             {Object.entries(content).map(([title, value]) => (
-              <p className="">
+              <p className="" key={title}>
                 <span className="mr-2 inline-block w-16 uppercase">
                   {title}:
                 </span>
