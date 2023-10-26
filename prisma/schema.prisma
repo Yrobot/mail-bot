@@ -33,12 +33,10 @@ model Channel {
   verify Boolean @default(false) // stmp可行性
 
   // SMTP
-  host       String
-  port       Int
-  account    String      @unique
-  token      String
-  interfaces Interface[]
-  messages   Message[]
+  host    String
+  port    Int
+  account String @unique
+  token   String
 }
 
 // 一个 channel 可以有多个接口，接口会在基础smtp基础上加一些功能，如：覆盖参数，自动添加messageId，自动添加时间戳等
@@ -52,9 +50,7 @@ model Interface {
   path   String // request path // http://xxx.com/api/$path
   status String @default("ACTIVE") // ACTIVE, CLOSED
 
-  channel  Channel   @relation(fields: [email], references: [account])
-  email    String
-  messages Message[]
+  email String
 }
 
 // 
@@ -68,16 +64,14 @@ model Message {
   // Based on https://nodemailer.com/message/ 
   from    String
   to      String // https://nodemailer.com/message/addresses/
-  cc      String?  // https://nodemailer.com/message/addresses/
+  cc      String? // https://nodemailer.com/message/addresses/
   bcc     String? // https://nodemailer.com/message/addresses/
   subject String
   text    String?
   html    String?
   // attachments String[] // disbale attachments for now
 
-  channel Channel? @relation(fields: [email], references: [account])
-  email   String?
+  email String?
 
-  interface   Interface? @relation(fields: [interfaceId], references: [id])
   interfaceId Int?
 }
