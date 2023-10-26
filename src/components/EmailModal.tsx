@@ -1,4 +1,5 @@
 "use client";
+import { useMemo } from "react";
 import type { Channel } from "@prisma/client";
 import cn from "classnames";
 import { Formik } from "formik";
@@ -109,18 +110,24 @@ const PipeFiled = ({
   </div>
 );
 
-const config: {
+const getConfig = ({
+  isEdit,
+}: {
+  isEdit: boolean;
+}): {
   title: string;
   name: keyof EmailFormValues;
   type?: string;
   placeholder?: string;
   as?: any;
-}[] = [
+  disabled?: boolean;
+}[] => [
   {
     title: "邮箱地址",
     name: "account",
     type: "email",
     placeholder: "xxx@xxx.com",
+    disabled: isEdit,
   },
   {
     title: "主机地址",
@@ -165,11 +172,12 @@ function EmailModal({ close, data }: { close: () => void; data?: Channel }) {
         pipeStr: "",
       };
 
+  const config = useMemo(() => getConfig({ isEdit }), [isEdit]);
+
   return (
     <div>
       <h3 className="mb-2 text-lg font-bold">
-        {/* {isEdit ? "编辑邮箱" : "新建邮箱"} */}
-        新建/编辑 邮箱
+        {isEdit ? "编辑邮箱" : "新建邮箱"}
       </h3>
       <Formik
         initialValues={initData as EmailFormValues}
