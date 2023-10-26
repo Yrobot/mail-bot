@@ -16,7 +16,11 @@ type EmailFormValues = EmailParam;
 const EmailFormValidateSchema = Yup.object().shape({
   account: Yup.string().email("Email不符合规范").required("此为必填项"),
   host: Yup.string()
-    // .matches(/^http/g, "地址去除协议")
+    .test({
+      test: (value) =>
+        !(value?.startsWith("http://") || value?.startsWith("https://")),
+      message: "主机地址请去掉协议头",
+    })
     .required("此为必填项"),
   token: Yup.string().required("此为必填项"),
   port: Yup.number()
@@ -164,7 +168,8 @@ function EmailModal({ close, data }: { close: () => void; data?: Channel }) {
   return (
     <div>
       <h3 className="mb-2 text-lg font-bold">
-        {isEdit ? "编辑邮箱" : "新建邮箱"}
+        {/* {isEdit ? "编辑邮箱" : "新建邮箱"} */}
+        新建/编辑 邮箱
       </h3>
       <Formik
         initialValues={initData as EmailFormValues}

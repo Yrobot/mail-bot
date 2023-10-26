@@ -23,7 +23,7 @@ datasource db {
 // 可能支持别 EMAIL 连接的服务
 model Channel {
   id        Int      @id @default(autoincrement())
-  status    String   @default("ACTIVE") // ACTIVE, CLOSED, DELETED
+  status    String   @default("ACTIVE") // ACTIVE, CLOSED
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   export    Boolean  @default(true) // 默认直接暴露到 http
@@ -50,7 +50,7 @@ model Interface {
   pipeStr String?
 
   path   String // request path // http://xxx.com/api/$path
-  status String @default("ACTIVE") // ACTIVE, CLOSED, DELETED
+  status String @default("ACTIVE") // ACTIVE, CLOSED
 
   channel  Channel   @relation(fields: [email], references: [account])
   email    String
@@ -59,24 +59,25 @@ model Interface {
 
 // 
 model Message {
-  id     Int    @id @default(autoincrement())
-  status String // ACTIVE, CLOSE, DELETED
+  id     Int     @id @default(autoincrement())
+  status String // SUCCESS, FAILED
+  failed String? // 失败原因
 
   createdAt DateTime @default(now())
 
   // Based on https://nodemailer.com/message/ 
   from    String
   to      String // https://nodemailer.com/message/addresses/
-  cc      String // https://nodemailer.com/message/addresses/
-  bcc     String // https://nodemailer.com/message/addresses/
+  cc      String?  // https://nodemailer.com/message/addresses/
+  bcc     String? // https://nodemailer.com/message/addresses/
   subject String
-  text    String
-  html    String
+  text    String?
+  html    String?
   // attachments String[] // disbale attachments for now
 
-  channel Channel @relation(fields: [email], references: [account])
-  email   String
+  channel Channel? @relation(fields: [email], references: [account])
+  email   String?
 
-  interface   Interface @relation(fields: [interfaceId], references: [id])
-  interfaceId Int
+  interface   Interface? @relation(fields: [interfaceId], references: [id])
+  interfaceId Int?
 }

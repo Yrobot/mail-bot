@@ -1,7 +1,7 @@
 "use server";
 import type { Channel, Message } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { Status } from "@/constant";
+import { Status, MessageStatus } from "@/constant";
 import {
   sendEmailFromChannel,
   sendEmailFromInterface,
@@ -89,34 +89,90 @@ export const upsertEmail = async (email: EmailParam) => {
     });
 };
 
-type MessageInput = Partial<
-  Pick<Message, "from" | "to" | "bcc" | "cc" | "subject" | "text" | "html">
+type NonNullableRecord<T> = {
+  [P in keyof T]-?: NonNullable<T[P]>;
+};
+
+type GetNullKeys<T> = {
+  [K in keyof T]: null extends T[K] ? K : never;
+}[keyof T];
+
+type MessageNullKeys = GetNullKeys<Message>;
+
+type Null2Option<T> = Partial<T> & Required<Omit<T, MessageNullKeys>>;
+
+type MessageInput = Null2Option<
+  Pick<
+    NonNullableRecord<Message>,
+    "from" | "to" | "bcc" | "cc" | "subject" | "text" | "html"
+  >
 >;
 
 type MessageWithChannel = MessageInput & {
-  email: Message["email"];
+  email: Exclude<Message["email"], null>;
 };
 
 type MessageWithInterface = MessageInput & {
-  interfaceId: Message["interfaceId"];
+  interfaceId: Exclude<Message["interfaceId"], null>;
 };
 
 export const sendMessage = async (
   message: MessageWithChannel | MessageWithInterface,
 ) => {
-  if ("email" in message) {
-    const { email, ...res } = message;
-    return sendEmailFromChannel({
-      email,
-      message: res,
+  return (async () => {
+    if ("email" in message) {
+      const { email, ...res } = message;
+      return sendEmailFromChannel({
+        email,
+        message: res,
+      });
+    }
+    if ("interfaceId" in message) {
+      const { interfaceId, ...res } = message;
+      return sendEmailFromInterface({
+        interfaceId,
+        message: res,
+      });
+    }
+    throw new Error("Invalid message: required email or interfaceId");
+  })()
+    .then(async (res) => {
+      await prisma.message.create({
+        data: {
+          ...message,
+          status: MessageStatus.SUCCESS,
+        },
+      });
+      return res;
+    })
+    .catch(async (err) => {
+      await prisma.message.create({
+        data: {
+          ...message,
+          status: MessageStatus.FAILED,
+          failed: err.message,
+        },
+      });
+      throw err;
+    })
+    .finally(() => {
+      revalidatePath("/messages");
     });
-  }
-  if ("interfaceId" in message) {
-    const { interfaceId, ...res } = message;
-    return sendEmailFromInterface({
-      interfaceId,
-      message: res,
-    });
-  }
-  throw new Error("Invalid message: required email or interfaceId");
 };
+
+export const getMessageList = async () =>
+  prisma.message.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+export const deleteMessage = async (id: number) =>
+  prisma.message
+    .delete({
+      where: { id },
+    })
+    .then((res) => {
+      revalidatePath("/messages");
+      return res;
+    });

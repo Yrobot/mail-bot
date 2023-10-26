@@ -5,7 +5,7 @@ function Tooltip({
   className,
   children,
 }: {
-  tip?: string;
+  tip?: string | React.ReactNode;
   className?: string;
   children: React.ReactNode;
 }) {

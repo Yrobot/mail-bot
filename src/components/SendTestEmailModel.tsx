@@ -1,9 +1,11 @@
 "use client";
+import { useState } from "react";
 import * as Yup from "yup";
 import { useLocalStorageState } from "ahooks";
 import { sendMessage } from "@/services";
 import { open } from "@/components/Modal";
 import Input from "@/components/Input";
+import ObjectView from "@/components/ObjectView";
 import toast from "@/toast";
 
 const Filed = ({
@@ -35,10 +37,11 @@ function SendTestEmailModel({
   close: () => void;
   email: string;
 }) {
+  const [loading, setLoading] = useState<boolean>(false);
   const [to = "", setTo] = useLocalStorageState<string>("USER_TEST_TO_EMAIL");
   const content = {
     to,
-    from: email,
+    from: `Mail-Bot <${email}>`,
     ...defaultContent,
   };
   const submittable = Yup.string().required().email().isValidSync(to);
@@ -55,16 +58,7 @@ function SendTestEmailModel({
           error={!submittable ? "请输入邮箱地址" : undefined}
         />
         <Filed title="发送内容">
-          <div className="space-y-2 text-sm text-primary opacity-60">
-            {Object.entries(content).map(([title, value]) => (
-              <p className="" key={title}>
-                <span className="mr-2 inline-block w-16 uppercase">
-                  {title}:
-                </span>
-                <span>{value}</span>
-              </p>
-            ))}
-          </div>
+          <ObjectView data={content} />
         </Filed>
       </div>
       <div className="modal-action mt-8">
@@ -74,8 +68,10 @@ function SendTestEmailModel({
         <button
           className="btn btn-neutral"
           type="submit"
-          disabled={!submittable}
+          disabled={!submittable || loading}
           onClick={() => {
+            if (loading) return;
+            setLoading(true);
             sendMessage({
               email,
               ...content,
@@ -86,10 +82,13 @@ function SendTestEmailModel({
               })
               .catch((error) => {
                 toast.error(`发送失败: ${error}`);
+              })
+              .finally(() => {
+                setLoading(false);
               });
           }}
         >
-          发送
+          {loading ? "发送中..." : "发送"}
         </button>
       </div>
     </div>

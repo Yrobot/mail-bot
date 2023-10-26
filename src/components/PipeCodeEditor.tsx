@@ -16,7 +16,7 @@ import { constrainedEditor } from "constrained-editor-plugin";
 const TYPE_CODE = `type KeyTypes = "from" | "to" | "cc" | "bcc" | "subject" | "text" | "html" | string;
 type ValueTypes = string | number | undefined;
 type Email = Record<KeyTypes, ValueTypes>;`;
-const PRE_CODE = `<T extends Email>(req: T): Email => ( // 在下方更新转换逻辑`;
+const PRE_CODE = `<T extends Email>(req: T): Email => ( // req为请求参数 // 在下方更新转换逻辑`;
 const LAST_CODE = `)`;
 
 const CODE_LABEL = "pipeStr";
