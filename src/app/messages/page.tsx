@@ -41,7 +41,7 @@ async function MessagesPage() {
       )}
       {!isEmpty && (
         <Table
-          data={list.map((msg) => ({ key: msg.id, ...msg }))}
+          data={list.map((msg: Awaited<ReturnType<typeof getMessageList>>[0]) => ({ key: msg.id, ...msg }))}
           columns={[
             {
               title: "发送时间",

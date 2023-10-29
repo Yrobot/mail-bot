@@ -1,12 +1,9 @@
 import React from "react";
 
-function Table<
-  T extends {
-    key: string | number;
-  },
->({
+function Table<T>({
   columns,
   data,
+  rowKey = "id" as keyof T,
 }: {
   columns: {
     title?: string;
@@ -14,9 +11,8 @@ function Table<
     render?: (value: any, row: T) => React.ReactNode;
     as?: "th" | "td";
   }[];
-  data: (T & {
-    [key: string]: unknown;
-  })[];
+  data: T[];
+  rowKey?: keyof T;
 }) {
   const header = (
     <>
@@ -33,7 +29,7 @@ function Table<
       </thead>
       <tbody>
         {data.map((row) => (
-          <tr key={row.key}>
+          <tr key={row[rowKey] as string}>
             {columns.map(
               ({
                 key,
@@ -44,7 +40,7 @@ function Table<
                 },
                 as: As = "td",
               }) => (
-                <As key={key}>{render(row[key], row)}</As>
+                <As key={key}>{render(row[key as keyof T], row)}</As>
               ),
             )}
           </tr>

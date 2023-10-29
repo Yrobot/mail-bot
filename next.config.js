@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: true,
-  },
+  experimental: { webpackBuildWorker: true },
   webpack: function (config) {
     config.module.rules.push({
       test: /\.md$/,

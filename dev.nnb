@@ -22,7 +22,7 @@
         {
             "language": "typescript",
             "source": [
-                "import { createTransport } from \"nodemailer\";\n\n(async () => {\n  const transporter = createTransport({\n    host: \"smtp.qiye.aliyun.com\",\n    port: 465,\n    auth: {\n      user: \"mail@yrobot.top\",\n      pass: \"DXxIExnKIY68ylks\",\n    },\n  });\n  console.log(await transporter.verify());\n})();\n"
+                "import { createTransport } from \"nodemailer\";\n\n(async () => {\n  const transporter = createTransport({\n    host: \"smtp.qiye.aliyun.com\",\n    port: 465,\n    auth: {\n      user: \"mail@yrobot.top\",\n      pass: \"\",\n    },\n  });\n  console.log(await transporter.verify());\n})();\n"
             ],
             "outputs": [
                 {
