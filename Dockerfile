@@ -31,6 +31,7 @@ FROM base AS runner
 WORKDIR /app
 COPY --from=builder /app .
 COPY --from=deps-pro /app/node_modules ./node_modules
+RUN yarn prisma generate
 
 EXPOSE 3000
 CMD ["yarn", "start"]
