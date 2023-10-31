@@ -30,6 +30,7 @@ jobs:
     
   github_release:  
     name: Github Release
+    needs: docker_release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
