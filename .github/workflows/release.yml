@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:latest ${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:${{ github.ref_name }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:latest,${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:${{ github.ref_name }}
     
   github_release:  
     name: Github Release
