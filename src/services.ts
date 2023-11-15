@@ -146,13 +146,15 @@ export const sendMessage = async (
       return res;
     })
     .catch(async (err) => {
-      await prisma.message.create({
-        data: {
-          ...message,
-          status: MessageStatus.FAILED,
-          failed: err.message,
-        },
-      });
+      try {
+        await prisma.message.create({
+          data: {
+            ...message,
+            status: MessageStatus.FAILED,
+            failed: err.message,
+          },
+        });
+      } catch (error) {}
       throw err;
     })
     .finally(() => {
