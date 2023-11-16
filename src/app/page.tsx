@@ -7,7 +7,10 @@ import CerateEmailButton from "@/components/CerateEmailButton";
 import UrlTooltip from "@/components/UrlTooltip";
 import Tooltip from "@/components/Tooltip";
 import StatusBadge from "@/components/StatusBadge";
-import { EmailOpenSwitchWrapper } from "@/components/ActionWrapper";
+import {
+  EmailOpenSwitchWrapper,
+  EmailExportSwitchWrapper,
+} from "@/components/ActionWrapper";
 import { route } from "@/routes";
 
 type Status = "ACTIVE" | "CLOSED" | "DELETED";
@@ -72,14 +75,17 @@ export default async function Home() {
               {
                 title: "http直接请求",
                 key: "export",
-                render: (support, { account }) =>
-                  support ? (
-                    <UrlTooltip path={`/email/${account}`}>
-                      <div className="badge badge-accent">打开</div>
-                    </UrlTooltip>
-                  ) : (
-                    <div className="badge badge-ghost">关闭</div>
-                  ),
+                render: (support, { account }) => (
+                  <EmailExportSwitchWrapper email={account}>
+                    {support ? (
+                      <UrlTooltip path={`/email/${account}`}>
+                        <div className="badge badge-accent">打开</div>
+                      </UrlTooltip>
+                    ) : (
+                      <div className="badge badge-ghost">关闭</div>
+                    )}
+                  </EmailExportSwitchWrapper>
+                ),
               },
               {
                 title: "pipe转换逻辑",

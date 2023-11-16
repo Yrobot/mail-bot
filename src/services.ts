@@ -51,6 +51,24 @@ export const switchEmailStatus = async (email: string) => {
     });
 };
 
+export const switchEmailExport = async (email: string) => {
+  const channel = await prisma.channel.findUnique({
+    where: { account: email },
+  });
+  if (!channel) throw new Error("Channel not found");
+  return prisma.channel
+    .update({
+      where: { account: email },
+      data: {
+        export: !channel.export,
+      },
+    })
+    .then((res) => {
+      revalidatePath("/");
+      return res;
+    });
+};
+
 export const activeEmail = async (email: string) =>
   prisma.channel
     .update({
