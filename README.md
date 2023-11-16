@@ -4,6 +4,7 @@
   </a>
 </p>
 <br/>
+
 <h2 align="center">
   <a href="https://github.com/Yrobot/mail-bot">Mail-Bot</a>
 </h2>
@@ -11,17 +12,63 @@
   A nice tool transform mail smtp to http request, and manage all mails in one place.
 </p>
 
+![yubEFV-13-26-09](https://images.yrobot.top/2023-11-16/yubEFV-13-26-09.png)
+
 <!-- ## Demos -->
 
 ## How To Start
 
-### Docker
-
+### Install [Docker]
 
 ```bash
 docker run -d \
   --name mail-bot \
-  -p 3000:3000 \ 
+  -p 3000:3000 \
   -v $HOME/data/mail-bot:/app/data \
   yrobot/mail-bot:latest
+```
+
+### Add SMTP Email
+
+- click `新建邮箱` in the `邮箱` page
+- fill in the fields and click `提交`
+
+```
+Email Address: $EMAIL_ADDRESS
+Host: smtp.xxx.com
+Post: 465
+Token: xxxxxx
+```
+
+### Test SMTP Email
+
+- click `测试` in the Email list Actions
+
+  or
+
+- send POST http request to `http://localhost:3000/email/$EMAIL_ADDRESS`
+
+```ts
+// copy this code to your browser console and run
+
+const EMAIL_ADDRESS = "xxx@xxx";
+const TO_EMAIL_ADDRESS = "xxx@xxx";
+
+(async () => {
+  fetch(`http://localhost:3000/email/${EMAIL_ADDRESS}`, {
+    method: "POST",
+    body: JSON.stringify({
+      subject: "Hi Mail-Bot",
+      text: "Hello This is a test mail form Mail-Bot API",
+      to: TO_EMAIL_ADDRESS,
+      from: `Mail-Bot <${EMAIL_ADDRESS}>`,
+    }),
+  })
+    .then((res) => {
+      console.log(res.status);
+      return res;
+    })
+    .then((res) => res?.text() ?? res?.json())
+    .then((res) => console.log(res));
+})();
 ```
