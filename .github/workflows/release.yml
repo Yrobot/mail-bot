@@ -19,7 +19,7 @@ jobs:
       - name: Get Next Release Version (dry run semantic-release)
         id: version
         run: |
-          export NEXT_VERSION_TAG=$(npx semantic-release --dry-run -p | grep 'The next release version is' | sed -E 's/.* ([[:digit:].]+)$/\1/')
+          export NEXT_VERSION_TAG=$(npx semantic-release -b release --dry-run -p | grep 'The next release version is' | sed -E 's/.* ([[:digit:].]+)$/\1/')
           echo "version_tag=${NEXT_VERSION_TAG}" >> $GITHUB_OUTPUT
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
