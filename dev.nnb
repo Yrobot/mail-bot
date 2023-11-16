@@ -3,7 +3,7 @@
         {
             "language": "typescript",
             "source": [
-                "(async () => {\n  fetch(\"http://localhost:3000/email/mail@yrobot.top\", {\n    method: \"POST\",\n    body: JSON.stringify({\n      subject: \"Hi NI好\",\n      text: \"Hello 你好 我是接口发送的邮件\",\n      to: \"yrobot@qq.com\",\n      from: 'API-Mail <mail@yrobot.top>'\n    }),\n  })\n    .then((res) => {\n      console.log(res.status);\n      return res;\n    })\n    .then((res) => res?.text() ?? res?.json())\n    .then((res) => console.log(res));\n})();\n"
+                "(async () => {\n  fetch(\"http://localhost:3000/email/mail@yrobot.top\", {\n    method: \"POST\",\n    body: JSON.stringify({\n      subject: \"Hi NI好\",\n      text: \"Hello 你好 我是接口发送的邮件\",\n      to: \"yrobot@qq.com\",\n      // from: 'API-Mail <mail@yrobot.top>'\n    }),\n  })\n    .then((res) => {\n      console.log(res.status);\n      return res;\n    })\n    .then((res) => res?.text() ?? res?.json())\n    .then((res) => console.log(res));\n})();\n"
             ],
             "outputs": [
                 {
@@ -11,8 +11,8 @@
                         {
                             "mime": "application/vnd.code.notebook.stdout",
                             "value": [
-                                "200",
-                                "ok",
+                                "400",
+                                "Mail command failed: 440 mail from account doesn't conform with authentication (Auth Account:mail@yrobot.top|Mail Account:)",
                                 ""
                             ]
                         }

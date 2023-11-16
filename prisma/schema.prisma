@@ -63,11 +63,11 @@ model Message {
   createdAt DateTime @default(now())
 
   // Based on https://nodemailer.com/message/ 
-  from    String
-  to      String // https://nodemailer.com/message/addresses/
+  from    String?
+  to      String? // https://nodemailer.com/message/addresses/
   cc      String? // https://nodemailer.com/message/addresses/
   bcc     String? // https://nodemailer.com/message/addresses/
-  subject String
+  subject String?
   text    String?
   html    String?
   // attachments String[] // disbale attachments for now

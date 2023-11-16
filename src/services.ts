@@ -154,7 +154,9 @@ export const sendMessage = async (
             failed: err.message,
           },
         });
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
       throw err;
     })
     .finally(() => {
