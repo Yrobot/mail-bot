@@ -30,6 +30,27 @@ export const deleteEmail = async (email: string) =>
       return res;
     });
 
+export const switchEmailStatus = async (email: string) => {
+  const channel = await prisma.channel.findUnique({
+    where: { account: email },
+  });
+  if (!channel) throw new Error("Channel not found");
+  if (![Status.ACTIVE + "", Status.CLOSED + ""].includes(channel.status))
+    throw new Error("Status is not allowed to switch: " + channel.status);
+  return prisma.channel
+    .update({
+      where: { account: email },
+      data: {
+        status:
+          channel.status === Status.ACTIVE ? Status.CLOSED : Status.ACTIVE,
+      },
+    })
+    .then((res) => {
+      revalidatePath("/");
+      return res;
+    });
+};
+
 export const activeEmail = async (email: string) =>
   prisma.channel
     .update({

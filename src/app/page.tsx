@@ -7,6 +7,7 @@ import CerateEmailButton from "@/components/CerateEmailButton";
 import UrlTooltip from "@/components/UrlTooltip";
 import Tooltip from "@/components/Tooltip";
 import StatusBadge from "@/components/StatusBadge";
+import { EmailOpenSwitchWrapper } from "@/components/ActionWrapper";
 import { route } from "@/routes";
 
 type Status = "ACTIVE" | "CLOSED" | "DELETED";
@@ -40,7 +41,11 @@ export default async function Home() {
               {
                 title: "邮箱开关",
                 key: "status",
-                render: (status) => statusMap[status as Status] ?? "-",
+                render: (status, { account }) => (
+                  <EmailOpenSwitchWrapper email={account}>
+                    {statusMap[status as Status] ?? "-"}
+                  </EmailOpenSwitchWrapper>
+                ),
               },
               {
                 title: "状态",
