@@ -16,25 +16,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
-      - name: Get Next Release Version
+      - name: Get Next Release Version (dry run semantic-release)
         id: version
-        uses: codfish/semantic-release-action@v3
-        with:
-          dry-run: true
-          branches: release
-          plugins: |
-            [
-              "@semantic-release/commit-analyzer"
-            ]
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
-      - run: echo steps.version.outputs.release-version=${{ steps.version.outputs.release-version }}
-      - name: Check release version
-        if: ${{ steps.version.outputs.release-version }} == ''
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.setFailed('Nothing to release')
+        run: |
+          export NEXT_VERSION_TAG=$(npx semantic-release -b release --dry-run -p | grep 'The next release version is' | sed -E 's/.* ([[:digit:].]+)$/\1/')
+          echo "version_tag=${NEXT_VERSION_TAG}" >> $GITHUB_OUTPUT
+      - run: echo NEXT_VERSION_TAG=${{ steps.version.outputs.version_tag }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -48,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:latest,${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:${{ steps.version.outputs.release-version }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:latest,${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:${{ steps.version.outputs.version_tag }}
 
   github_release:
     name: Github Release
