@@ -56,7 +56,9 @@ jobs:
         with:
           node-version: "lts/*"
       - name: Run semantic-release
-        run: npx semantic-release -b release
+        run: |
+          yarn add -D @semantic-release/changelog @semantic-release/git 
+          npx semantic-release -b release
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
           NPM_TOKEN: "00000000-0000-0000-0000-000000000000" # no need to publish npm, just escape the "@semantic-release/npm" step [verifyConditions]
