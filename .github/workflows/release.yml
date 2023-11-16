@@ -70,4 +70,10 @@ jobs:
           type: now
           from_branch: master
           target_branch: release
+          message: version release
           github_token: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+      - name: Git push branch master
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          branch: master
