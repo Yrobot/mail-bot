@@ -16,16 +16,17 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
-      - name: Get Next Release Version (dry run semantic-release)
+      - name: Get Next Release Version
         id: version
-        run: |
-          export NEXT_VERSION_TAG=$(npx semantic-release -b release --dry-run -p | grep 'The next release version is' | sed -E 's/.* ([[:digit:].]+)$/\1/')
-          echo NEXT_VERSION_TAG=${NEXT_VERSION_TAG}
-          echo "version_tag=${NEXT_VERSION_TAG}" >> $GITHUB_OUTPUT
+        uses: codfish/semantic-release-action@v3
+        with:
+          dry-run: true
+          branches: release
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+      - run: echo steps.version.outputs.release-version=${{ steps.version.outputs.release-version }}
       - name: Check release version
-        if: ${{ env.NEXT_VERSION_TAG == '' }}
+        if: ${{ steps.version.outputs.release-version }} == ''
         uses: actions/github-script@v6
         with:
           script: |
@@ -43,7 +44,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:latest,${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:${{ steps.version.outputs.version_tag }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:latest,${{ secrets.DOCKERHUB_USERNAME }}/mail-bot:${{ steps.version.outputs.release-version }}
 
   github_release:
     name: Github Release
