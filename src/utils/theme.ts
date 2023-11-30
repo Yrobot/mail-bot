@@ -1,6 +1,5 @@
 "use client";
-import { useEffect } from "react";
-import { useLocalStorageState } from "ahooks";
+import { useTheme as useNextTheme } from "next-themes";
 
 export enum themes {
   "dark" = "dark",
@@ -10,17 +9,6 @@ export enum themes {
 
 export type Theme = `${themes}`;
 
-export const useTheme = () => {
-  const [theme = `${themes.lofi}`, setTheme] =
-    useLocalStorageState<Theme>("USER_SET_THEME");
+export const themeArr: Theme[] = Object.values(themes);
 
-  useEffect(() => {
-    if (theme) {
-      document
-        ?.getElementsByTagName("html")?.[0]
-        ?.setAttribute("data-theme", theme);
-    }
-  }, [theme]);
-
-  return { theme, setTheme };
-};
+export const useTheme = useNextTheme;

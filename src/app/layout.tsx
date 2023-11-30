@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import NavBar from "@/components/NavBar";
 import SideMenu from "@/components/SideMenu";
 import { ModalLayer } from "@/components/Modal";
+import Provider from "@/components/Provider";
 
 import "./globals.css";
 
@@ -23,17 +24,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="lofi">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <NavBar />
-        <div className="relative z-0 flex flex-auto flex-row items-start justify-start">
-          <div className="h-full w-80 flex-none shadow">
-            <SideMenu />
+        <Provider>
+          <NavBar />
+          <div className="relative z-0 flex flex-auto flex-row items-start justify-start">
+            <div className="h-full w-80 flex-none shadow">
+              <SideMenu />
+            </div>
+            <div className="h-full flex-auto overflow-x-hidden">{children}</div>
           </div>
-          <div className="h-full flex-auto overflow-x-hidden">{children}</div>
-        </div>
-        <ModalLayer />
-        <Toaster />
+          <ModalLayer />
+          <Toaster />
+        </Provider>
       </body>
     </html>
   );

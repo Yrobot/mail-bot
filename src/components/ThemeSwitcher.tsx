@@ -3,6 +3,7 @@ import React from "react";
 import cn from "classnames";
 import Icon from "@/components/Icon";
 import { themes, Theme, useTheme } from "@/utils/theme";
+import { useMounted } from "@/utils/hooks";
 
 const ThemeOption = ({
   theme,
@@ -10,41 +11,44 @@ const ThemeOption = ({
   isChecked,
 }: {
   theme: Theme;
-  setTheme: ReturnType<typeof useTheme>["setTheme"];
+  setTheme: (theme: Theme) => void;
   isChecked: boolean;
-}) => (
-  <button
-    className="overflow-hidden rounded-lg text-left outline-base-content"
-    data-set-theme={theme}
-    onClick={() => setTheme(theme)}
-  >
-    <span
-      data-theme={theme}
-      className="block w-full cursor-pointer bg-base-100 font-sans text-base-content"
+}) => {
+  const mounted = useMounted();
+  return (
+    <button
+      className="overflow-hidden rounded-lg text-left outline-base-content"
+      data-set-theme={theme}
+      onClick={() => setTheme(theme)}
     >
-      <span className="grid grid-cols-5 grid-rows-3">
-        <span className="col-span-5 row-span-3 row-start-1 flex items-center gap-2 px-4 py-3">
-          <Icon
-            className={cn("h-3 w-3 shrink-0", {
-              invisible: !isChecked,
-            })}
-            icon="check"
-          />
-          <span className="flex-grow text-sm">{theme}</span>
-          <span
-            className="flex h-full flex-shrink-0 flex-wrap gap-1"
-            data-svelte-h="svelte-dkjulf"
-          >
-            <span className="w-2 rounded bg-primary"></span>
-            <span className="w-2 rounded bg-secondary"></span>
-            <span className="w-2 rounded bg-accent"></span>
-            <span className="w-2 rounded bg-neutral"></span>
+      <span
+        data-theme={theme}
+        className="block w-full cursor-pointer bg-base-100 font-sans text-base-content"
+      >
+        <span className="grid grid-cols-5 grid-rows-3">
+          <span className="col-span-5 row-span-3 row-start-1 flex items-center gap-2 px-4 py-3">
+            <Icon
+              className={cn("h-3 w-3 shrink-0", {
+                invisible: !mounted || !isChecked,
+              })}
+              icon="check"
+            />
+            <span className="flex-grow text-sm">{theme}</span>
+            <span
+              className="flex h-full flex-shrink-0 flex-wrap gap-1"
+              data-svelte-h="svelte-dkjulf"
+            >
+              <span className="w-2 rounded bg-primary"></span>
+              <span className="w-2 rounded bg-secondary"></span>
+              <span className="w-2 rounded bg-accent"></span>
+              <span className="w-2 rounded bg-neutral"></span>
+            </span>
           </span>
         </span>
       </span>
-    </span>
-  </button>
-);
+    </button>
+  );
+};
 
 function ThemeSwitcher() {
   const { theme: current, setTheme } = useTheme();

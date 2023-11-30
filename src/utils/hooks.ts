@@ -14,3 +14,11 @@ export const useClientState = <T extends unknown>({
   }, []);
   return [value, setValue];
 };
+
+export const useMounted = (): boolean => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  return mounted;
+};
