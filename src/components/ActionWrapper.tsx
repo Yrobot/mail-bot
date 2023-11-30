@@ -14,7 +14,7 @@ export function EmailOpenSwitchWrapper({
 }) {
   return (
     <div
-      className={cn("cursor-pointer select-none", className)}
+      className={cn("inline-block cursor-pointer select-none", className)}
       onClick={() => {
         switchEmailStatus(email).then(() => {
           toast.success("操作成功");
@@ -37,7 +37,7 @@ export function EmailExportSwitchWrapper({
 }) {
   return (
     <div
-      className={cn("cursor-pointer select-none", className)}
+      className={cn("inline-block cursor-pointer select-none", className)}
       onClick={() => {
         switchEmailExport(email).then(() => {
           toast.success("操作成功");

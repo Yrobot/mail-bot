@@ -15,7 +15,7 @@ function Tooltip({
       {tip && (
         <span
           className={cn(
-            "tooltip-popup invisible group-hover:visible",
+            "tooltip-popup invisible max-w-md group-hover:visible",
             className,
           )}
         >

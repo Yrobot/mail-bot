@@ -75,17 +75,18 @@ export default async function Home() {
               {
                 title: "http直接请求",
                 key: "export",
-                render: (support, { account }) => (
-                  <EmailExportSwitchWrapper email={account}>
-                    {support ? (
-                      <UrlTooltip path={`/email/${account}`}>
+                render: (support, { account }) =>
+                  support ? (
+                    <UrlTooltip path={`/email/${account}`}>
+                      <EmailExportSwitchWrapper email={account}>
                         <div className="badge badge-accent">打开</div>
-                      </UrlTooltip>
-                    ) : (
+                      </EmailExportSwitchWrapper>
+                    </UrlTooltip>
+                  ) : (
+                    <EmailExportSwitchWrapper email={account}>
                       <div className="badge badge-ghost">关闭</div>
-                    )}
-                  </EmailExportSwitchWrapper>
-                ),
+                    </EmailExportSwitchWrapper>
+                  ),
               },
               {
                 title: "pipe转换逻辑",
