@@ -1,33 +1,31 @@
 "use client";
 import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import cn from "classnames";
-import { useClientState } from "@/utils/hooks";
 import routes from "@/routes";
 
 function SideMenu() {
-  const [path] = useClientState({
-    default: routes[0].href,
-    getState: () => window.location.pathname,
-  });
+  const pathname = usePathname();
   return (
     <div className="">
       <ul className="menu p-4">
         {routes.map(({ name, href, disabled = false }) => (
           <li
             key={name}
-            className={cn({
+            className={cn("text-lg font-medium", {
               "disabled cursor-not-allowed": disabled,
             })}
           >
-            <a
+            <Link
               href={href}
-              className={cn("text-lg font-medium", {
-                active: path === href,
+              className={cn({
                 "pointer-events-none": disabled,
+                active: pathname === href,
               })}
             >
               {name}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
